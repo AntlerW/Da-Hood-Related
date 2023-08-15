@@ -2945,7 +2945,7 @@ function DiscordLib:Window(text)
 				PresetClr.Parent = ColorpickerFrame
 				PresetClr.BackgroundColor3 = preset
 				PresetClr.Position = UDim2.new(0.846153855, 0, 0.0740740746, 0)
-				PresetClr.Size = UDim2.new(0, 25, 0, 25)
+				PresetClr.Size = UDim2.new(0, 25, 0, 135)
 
 				PresetClrCorner.CornerRadius = UDim.new(0, 3)
 				PresetClrCorner.Name = "PresetClrCorner"
