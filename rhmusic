@@ -1,0 +1,15 @@
+satdown = false
+game:GetService("RunService").RenderStepped:Connect(function()
+	if workspace.MusicalChairs:FindFirstChild("CurrentTrack").Playing == false and satdown == false then
+		satdown = true
+		for i,v in pairs(workspace:GetDescendants()) do
+			if v.Name == "Chair" and v:IsA("Model") then
+				if v:FindFirstChild("MeshPart").MeshId == "rbxassetid://4678854029" then
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v:FindFirstChild("MeshPart").CFrame
+				end
+			end
+		end
+	elseif workspace.MusicalChairs:FindFirstChild("CurrentTrack").Playing == true and satdown == true then
+		satdown = false
+	end
+end)
