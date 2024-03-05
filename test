@@ -1,7 +1,1423 @@
-for i,v in pairs(game.Workspace:GetDescendants()) do
-  if v.Name == "5 [RPG Ammo] - $1061" then
-    if not v:FindFirstChild("Head") and v:IsA("Model") then
-      v:Destroy()
+weapon = _G.Weapon
+
+if weapon == "rev" then
+    local adminusers = {
+        _G.Host,
+        "nana9552"
+    }
+    getgenv().Pred = true -- set to true or false for prediction
+    
+    player = game.Players.LocalPlayer
+    ME = game:GetService('ReplicatedStorage').MainEvent
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+    keycodeMap = {
+        ["r"] = 0x52,
+    }
+    
+    function anticheatexe()
+        assert(getrawmetatable)
+        gmt = getrawmetatable(game)
+        setreadonly(gmt, false)
+        old = gmt.__namecall
+        gmt.__namecall = newcclosure(function(self, ...)
+            local args = {...}
+            if tostring(args[1]) == "BreathingHAMON" then
+                return
+            elseif tostring(args[1]) == "TeleportDetect" then
+                return
+            elseif tostring(args[1]) == "CHECKER_1" then
+                return
+            elseif tostring(args[1]) == "CHECKER" then
+                return
+            elseif tostring(args[1]) == "GUI_CHECK" then
+                return
+            elseif tostring(args[1]) == "OneMoreTime" then
+                return
+            elseif tostring(args[1]) == "checkingSPEED" then
+                return
+            elseif tostring(args[1]) == "BANREMOTE" then
+                return
+            elseif tostring(args[1]) == "PERMAIDBAN" then
+                return
+            elseif tostring(args[1]) == "KICKREMOTE" then
+                return
+            elseif tostring(args[1]) == "BR_KICKPC" then
+                return
+            end
+            return old(self, ...)
+        end)
     end
-  end
+    anticheatexe()
+    
+    function tp(position, speed)
+        local distance = (position - player.Character.HumanoidRootPart.Position).Magnitude
+        local time = distance / speed
+        teleport = game:GetService('TweenService'):Create(player.Character.HumanoidRootPart, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = CFrame.new(position)})
+        teleport:Play()
+    end
+    
+    function findplr(name)
+        for i,v in ipairs(game:GetService("Players"):GetChildren()) do
+            if (string.lower(name) == string.sub(string.lower(v.Name), 1, #name)) or (string.lower(name) == string.sub(string.lower(v.DisplayName), 1, #name)) then
+                return v.Name;
+            end
+        end
+    end
+    
+    buying = false
+    
+    game.ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent:Connect(function(message)
+        local chat = message.Message
+        local speaker = message.FromSpeaker
+        local prefix = _G.Prefix
+        if string.find(chat, prefix.."pred ") then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                getgenv().Pred = split[2]
+                print(getgenv().Pred)
+            end
+        elseif string.find(chat, prefix.."rejoin") then
+            if table.find(adminusers, speaker) then
+                game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId,game.JobId)
+            end
+        elseif string.find(chat, prefix.._G.BCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    local savedpos = game.Players:FindFirstChild(speaker).Character:WaitForChild("HumanoidRootPart").Position
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Revolver]") then
+                                if player.Character:FindFirstChild("[Revolver]").Ammo.Value > 0 then
+                                    player.Character:FindFirstChild("[Revolver]"):Activate()
+                                    player.Character:FindFirstChild("[Revolver]"):Deactivate()
+                                elseif player.Character:FindFirstChild("[Revolver]").Ammo.Value == 0 or player.Character:FindFirstChild("[Revolver]").Ammo.Value == 0 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Revolver]") then
+                                player.Backpack:FindFirstChild("[Revolver]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    wait(0.1)
+                    repeat wait()
+                        if player.Character.BodyEffects.Reload.Value == false and not target.Character:FindFirstChild("GRABBING_CONSTRAINT") then
+                            player.Character:MoveTo(target.Character.UpperTorso.Position)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                        end
+                    until target.Character:FindFirstChild("GRABBING_CONSTRAINT") or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    player.Character:MoveTo(savedpos)
+                    wait(3)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                    SilentAimTarg = nil
+                    wait(1)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KNCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    local savedpos = game.Players:FindFirstChild(speaker).Character:WaitForChild("HumanoidRootPart").Position
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Revolver]") then
+                                if player.Character:FindFirstChild("[Revolver]").Ammo.Value > 0 then
+                                    player.Character:FindFirstChild("[Revolver]"):Activate()
+                                    player.Character:FindFirstChild("[Revolver]"):Deactivate()
+                                elseif player.Character:FindFirstChild("[Revolver]").Ammo.Value == 0 or player.Character:FindFirstChild("[Revolver]").Ammo.Value == 0 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Revolver]") then
+                                player.Backpack:FindFirstChild("[Revolver]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    SilentAimTarg = nil
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Revolver]") then
+                                if player.Character:FindFirstChild("[Revolver]").Ammo.Value > 0 then
+                                    player.Character:FindFirstChild("[Revolver]"):Activate()
+                                    player.Character:FindFirstChild("[Revolver]"):Deactivate()
+                                elseif player.Character:FindFirstChild("[Revolver]").Ammo.Value == 0 or player.Character:FindFirstChild("[Revolver]").Ammo.Value == 0 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Revolver]") then
+                                player.Backpack:FindFirstChild("[Revolver]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    repeat wait()
+                        player.Character:MoveTo(target.Character.UpperTorso.Position)
+                        ME:FireServer("Stomp")
+                    until target.Character.BodyEffects.Dead.Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    SilentAimTarg = nil
+                    wait(0.2)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    wait(2)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game)
+                end
+            end
+        end
+    end)
+    
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if not player.Character:FindFirstChild("[Revolver]") and not player.Backpack:FindFirstChild("[Revolver]") and player.Character.BodyEffects["K.O"].Value == false then
+            if buying == false and player.DataFolder.Currency.Value > 1399 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("[Revolver] - $1379").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("[Revolver] - $1379").Head.Position
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or player.Character:FindFirstChild("[Revolver]") or player.Backpack:FindFirstChild("[Revolver]")
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if tonumber(player.DataFolder.Inventory:FindFirstChild("[Revolver]").Value) < 10 then
+            if buying == false and player.DataFolder.Currency.Value > 80 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("12 [Revolver Ammo] - $80").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("12 [Revolver Ammo] - $80").Head.Position
+                local player = game.Players.LocalPlayer
+                local revolver = player.Character:FindFirstChild("[Revolver]")
+                if revolver then
+                    revolver.Parent = player.Backpack
+                end
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or tonumber(player.DataFolder.Inventory:FindFirstChild("[Revolver]").Value) >= 100
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if getgenv().Pred == true then
+            pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+            split = string.split(pingvalue,'(')
+            ping = tonumber(split[1])
+            divided = ping / 1000
+            getgenv().finalprediction = divided + 0.037
+        end
+        if not player.Character:FindFirstChild("FloatingPart") then
+            Float = Instance.new('Part')
+            Float.Name = "FloatingPart"
+            Float.Parent = player.Character
+            Float.Transparency = 1
+            Float.Size = Vector3.new(2,0.2,1.5)
+            Float.Anchored = true
+        end
+        player.Character:FindFirstChild("FloatingPart").CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.1,0)
+        for _, child in pairs(player.Character:GetDescendants()) do
+            if child:IsA("BasePart") and child.CanCollide == true and child.Name ~= "FloatingPart" then
+                child.CanCollide = false
+            end
+        end
+    end)
+    
+    local mt = getrawmetatable(game)
+    local old = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(...)
+        local args = {...}
+        if SilentAimTarg ~= nil and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
+            if getgenv().Pred == true then
+                args[3] = SilentAimTarg.Character.HumanoidRootPart.Position + SilentAimTarg.Character.HumanoidRootPart.Velocity * getgenv().finalprediction
+            elseif getgenv().Pred == false then
+                args[3] = SilentAimTarg.Character.HumanoidRootPart.Position
+            end
+            return old(unpack(args))
+        end
+        return old(...)
+    end)
+elseif weapon == "rpg" then
+    local adminusers = {
+        _G.Host,
+        "nana9552" -- enter your host's userid
+    }
+    getgenv().Pred = true -- set to true or false for prediction
+    
+    player = game.Players.LocalPlayer
+    ME = game:GetService('ReplicatedStorage').MainEvent
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+    for i,v in pairs(game.Workspace:GetDescendants()) do
+        if v.Name == "5 [RPG Ammo] - $1061" then
+          if not v:FindFirstChild("Head") then
+            v:Destroy()
+          end
+        end
+      end
+    function anticheatexe()
+        assert(getrawmetatable)
+        gmt = getrawmetatable(game)
+        setreadonly(gmt, false)
+        old = gmt.__namecall
+        gmt.__namecall = newcclosure(function(self, ...)
+            local args = {...}
+            if tostring(args[1]) == "BreathingHAMON" then
+                return
+            elseif tostring(args[1]) == "TeleportDetect" then
+                return
+            elseif tostring(args[1]) == "CHECKER_1" then
+                return
+            elseif tostring(args[1]) == "CHECKER" then
+                return
+            elseif tostring(args[1]) == "GUI_CHECK" then
+                return
+            elseif tostring(args[1]) == "OneMoreTime" then
+                return
+            elseif tostring(args[1]) == "checkingSPEED" then
+                return
+            elseif tostring(args[1]) == "BANREMOTE" then
+                return
+            elseif tostring(args[1]) == "PERMAIDBAN" then
+                return
+            elseif tostring(args[1]) == "KICKREMOTE" then
+                return
+            elseif tostring(args[1]) == "BR_KICKPC" then
+                return
+            end
+            return old(self, ...)
+        end)
+    end
+    anticheatexe()
+    
+    function tp(position, speed)
+        local distance = (position - player.Character.HumanoidRootPart.Position).Magnitude
+        local time = distance / speed
+        teleport = game:GetService('TweenService'):Create(player.Character.HumanoidRootPart, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = CFrame.new(position)})
+        teleport:Play()
+    end
+    
+    function findplr(name)
+        for i,v in ipairs(game:GetService("Players"):GetChildren()) do
+            if (string.lower(name) == string.sub(string.lower(v.Name), 1, #name)) or (string.lower(name) == string.sub(string.lower(v.DisplayName), 1, #name)) then
+                return v.Name;
+            end
+        end
+    end
+    
+    buying = false
+    
+    game.ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent:Connect(function(message)
+        local chat = message.Message
+        local speaker = message.FromSpeaker
+        local prefix = _G.Prefix
+        if string.find(chat, prefix.."pred ") then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                getgenv().Pred = split[2]
+                print(getgenv().Pred)
+            end
+        elseif string.find(chat, prefix.."rejoin") then
+            if table.find(adminusers, speaker) then
+                game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId,game.JobId)
+            end
+        elseif string.find(chat, prefix.._G.KCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    local player = game.Players.LocalPlayer
+                    local rpg = player.Backpack:FindFirstChild("[RPG]")
+                    if rpg then
+                        rpg.Parent = player.Character
+                    end
+                    wait(1)
+                    SilentAimTarg = target
+                    repeat wait()
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[RPG]") then
+                                if player.Character:FindFirstChild("[RPG]").Ammo.Value == 1 then
+                                    player.Character:FindFirstChild("[RPG]"):Activate()
+                                    player.Character:FindFirstChild("[RPG]"):Deactivate()
+                                elseif target.Character.BodyEffects["K.O"].Value == false and player.Character:FindFirstChild("[RPG]").Ammo.Value == 0 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[RPG]") then
+                                player.Backpack:FindFirstChild("[RPG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    wait(0.1)
+                    repeat wait()
+                        if player.Character.BodyEffects.Reload.Value == false then
+                            player.Character:MoveTo(target.Character.UpperTorso.Position)
+                            ME:FireServer("Stomp")
+                           end
+                    until target.Character.BodyEffects.Dead.Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    SilentAimTarg = nil
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KNCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    local player = game.Players.LocalPlayer
+                    local rpg = player.Backpack:FindFirstChild("[RPG]")
+                    if rpg then
+                        rpg.Parent = player.Character
+                    end
+                    wait(1)
+                    SilentAimTarg = target
+                    repeat wait()
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[RPG]") then
+                                if player.Character:FindFirstChild("[RPG]").Ammo.Value == 1 then
+                                    player.Character:FindFirstChild("[RPG]"):Activate()
+                                    player.Character:FindFirstChild("[RPG]"):Deactivate()
+                                elseif target.Character.BodyEffects["K.O"].Value == false and player.Character:FindFirstChild("[RPG]").Ammo.Value == 0 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[RPG]") then
+                                player.Backpack:FindFirstChild("[RPG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    SilentAimTarg = nil
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.BCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    local player = game.Players.LocalPlayer
+                    local rpg = player.Backpack:FindFirstChild("[RPG]")
+                    if rpg then
+                      rpg.Parent = player.Character
+                    end
+                    wait(1)
+                    SilentAimTarg = target
+                    local savedpos = game.Players:FindFirstChild(speaker).Character:WaitForChild("HumanoidRootPart").Position
+                    repeat wait()
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[RPG]") then
+                                if player.Character:FindFirstChild("[RPG]").Ammo.Value == 1 then
+                                    player.Character:FindFirstChild("[RPG]"):Activate()
+                                    player.Character:FindFirstChild("[RPG]"):Deactivate()
+                                elseif target.Character.BodyEffects["K.O"].Value == false and player.Character:FindFirstChild("[RPG]").Ammo.Value == 0 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[RPG]") then
+                                player.Backpack:FindFirstChild("[RPG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    wait(0.1)
+                    repeat wait()
+                        if player.Character.BodyEffects.Reload.Value == false and not target.Character:FindFirstChild("GRABBING_CONSTRAINT") then
+                            player.Character:MoveTo(target.Character.UpperTorso.Position)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                           end
+                    until target.Character:FindFirstChild("GRABBING_CONSTRAINT") or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                      player.Character:MoveTo(savedpos)
+                      wait(3)
+                      game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                    SilentAimTarg = nil
+                    wait(1)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        end
+    end)
+    
+    RpgTimer = 75
+    Distance = 3
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if SilentAimTarg ~= nil then
+            Launcher = game:GetService('Workspace'):FindFirstChild('Ignored'):FindFirstChild('Launcher') or game:GetService('Workspace'):FindFirstChild('Ignored'):FindFirstChild('MyLauncher')
+            TargetRPG1 = SilentAimTarg
+            if Launcher and TargetRPG1 then
+                local TargetRPG = TargetRPG1.Character:FindFirstChild('HumanoidRootPart')
+                  if TargetRPG then
+                    if RpgTimer >= 0 then
+                          Launcher.CFrame = CFrame.new(TargetRPG.Position.X, TargetRPG.Position.Y + 5, TargetRPG.Position.Z)
+                          RpgTimer = RpgTimer - 1
+                    else
+                          Launcher.CFrame = CFrame.new(TargetRPG.Position.X, TargetRPG.Position.Y + Distance, TargetRPG.Position.Z)
+                          Distance = Distance - 1
+                    end
+                  else
+                      RpgTimer = 75
+                      Distance = 3
+                  end
+            else
+                RpgTimer = 75
+                Distance = 3
+            end
+        end
+        if not player.Character:FindFirstChild("[RPG]") and not player.Backpack:FindFirstChild("[RPG]") and player.Character:WaitForChild("BodyEffects")["K.O"].Value == false and player.Character:FindFirstChild("FULLY_LOADED_CHAR") then
+            if buying == false and player.DataFolder.Currency.Value > 21218 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("[RPG] - $21218").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("[RPG] - $21218").Head.Position
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or player.Character:FindFirstChild("[RPG]") or player.Backpack:FindFirstChild("[RPG]")
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if tonumber(player.DataFolder.Inventory:FindFirstChild("[RPG]").Value) < 2 and player.Character:FindFirstChild("FULLY_LOADED_CHAR") then
+            if buying == false and player.DataFolder.Currency.Value > 1061 then
+                buying = true
+                if player.Character:FindFirstChild("[RPG]") then
+                    player.Character:FindFirstChild("[RPG]").Parent = player.Backpack
+                end
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("5 [RPG Ammo] - $1061").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("5 [RPG Ammo] - $1061").Head.Position
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or tonumber(player.DataFolder.Inventory:FindFirstChild("[RPG]").Value) >= 10
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if getgenv().Pred == true then
+            pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+            split = string.split(pingvalue,'(')
+            ping = tonumber(split[1])
+            divided = ping / 1000
+            getgenv().finalprediction = divided + 0.037
+        end
+        if not player.Character:FindFirstChild("FloatingPart") then
+            Float = Instance.new('Part')
+            Float.Name = "FloatingPart"
+            Float.Parent = player.Character
+            Float.Transparency = 1
+            Float.Size = Vector3.new(2,0.2,1.5)
+            Float.Anchored = true
+        end
+        player.Character:FindFirstChild("FloatingPart").CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.1,0)
+        for _, child in pairs(player.Character:GetDescendants()) do
+            if child:IsA("BasePart") and child.CanCollide == true and child.Name ~= "FloatingPart" then
+                child.CanCollide = false
+            end
+        end
+    end)
+    
+    local mt = getrawmetatable(game)
+    local old = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(...)
+        local args = {...}
+        if SilentAimTarg ~= nil and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
+            args[3] = player.Character.HumanoidRootPart.Position + Vector3.new(0, 10, 0)
+            return old(unpack(args))
+        end
+        return old(...)
+    end) 
+elseif weapon == "db" then
+    local adminusers = {
+        _G.Host,
+        "nana9552"
+    }
+    getgenv().Pred = true -- set to true or false for prediction
+    
+    player = game.Players.LocalPlayer
+    ME = game:GetService('ReplicatedStorage').MainEvent
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+    keycodeMap = {
+        ["r"] = 0x52,
+    }
+    
+    function anticheatexe()
+        assert(getrawmetatable)
+        gmt = getrawmetatable(game)
+        setreadonly(gmt, false)
+        old = gmt.__namecall
+        gmt.__namecall = newcclosure(function(self, ...)
+            local args = {...}
+            if tostring(args[1]) == "BreathingHAMON" then
+                return
+            elseif tostring(args[1]) == "TeleportDetect" then
+                return
+            elseif tostring(args[1]) == "CHECKER_1" then
+                return
+            elseif tostring(args[1]) == "CHECKER" then
+                return
+            elseif tostring(args[1]) == "GUI_CHECK" then
+                return
+            elseif tostring(args[1]) == "OneMoreTime" then
+                return
+            elseif tostring(args[1]) == "checkingSPEED" then
+                return
+            elseif tostring(args[1]) == "BANREMOTE" then
+                return
+            elseif tostring(args[1]) == "PERMAIDBAN" then
+                return
+            elseif tostring(args[1]) == "KICKREMOTE" then
+                return
+            elseif tostring(args[1]) == "BR_KICKPC" then
+                return
+            end
+            return old(self, ...)
+        end)
+    end
+    anticheatexe()
+    
+    function tp(position, speed)
+        local distance = (position - player.Character.HumanoidRootPart.Position).Magnitude
+        local time = distance / speed
+        teleport = game:GetService('TweenService'):Create(player.Character.HumanoidRootPart, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = CFrame.new(position)})
+        teleport:Play()
+    end
+    
+    function findplr(name)
+        for i,v in ipairs(game:GetService("Players"):GetChildren()) do
+            if (string.lower(name) == string.sub(string.lower(v.Name), 1, #name)) or (string.lower(name) == string.sub(string.lower(v.DisplayName), 1, #name)) then
+                return v.Name;
+            end
+        end
+    end
+    
+    buying = false
+    
+    game.ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent:Connect(function(message)
+        local chat = message.Message
+        local speaker = message.FromSpeaker
+        local prefix = _G.Prefix
+        if string.find(chat, prefix.."pred ") then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                getgenv().Pred = split[2]
+                print(getgenv().Pred)
+            end
+        elseif string.find(chat, prefix.."rejoin") then
+            if table.find(adminusers, speaker) then
+                game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId,game.JobId)
+            end
+        elseif string.find(chat, prefix.._G.BCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    local savedpos = game.Players:FindFirstChild(speaker).Character:WaitForChild("HumanoidRootPart").Position
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Double-Barrel SG]") then
+                                if player.Character:FindFirstChild("[Double-Barrel SG]").Ammo.Value > 0 then
+                                    player.Character:FindFirstChild("[Double-Barrel SG]"):Activate()
+                                    player.Character:FindFirstChild("[Double-Barrel SG]"):Deactivate()
+                                elseif player.Character:FindFirstChild("[Double-Barrel SG]").Ammo.Value == 0 or player.Character:FindFirstChild("[Revolver]").Ammo.Value == 0 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Double-Barrel SG]") then
+                                player.Backpack:FindFirstChild("[Double-Barrel SG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    wait(0.1)
+                    repeat wait()
+                        if player.Character.BodyEffects.Reload.Value == false and not target.Character:FindFirstChild("GRABBING_CONSTRAINT") then
+                            player.Character:MoveTo(target.Character.UpperTorso.Position)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                        end
+                    until target.Character:FindFirstChild("GRABBING_CONSTRAINT") or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    player.Character:MoveTo(savedpos)
+                    wait(3)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                    SilentAimTarg = nil
+                    wait(1)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KNCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Double-Barrel SG]") then
+                                if player.Character:FindFirstChild("[Double-Barrel SG]").Ammo.Value == 2 then
+                                    player.Character:FindFirstChild("[Double-Barrel SG]"):Activate()
+                                    player.Character:FindFirstChild("[Double-Barrel SG]"):Deactivate()
+                                elseif player.Character:FindFirstChild("[Double-Barrel SG]").Ammo.Value == 1 or player.Character:FindFirstChild("[Double-Barrel SG]").Ammo.Value == 1 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Double-Barrel SG]") then
+                                player.Backpack:FindFirstChild("[Double-Barrel SG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    SilentAimTarg = nil
+                    wait(0.7)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    wait(2)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Double-Barrel SG]") then
+                                if player.Character:FindFirstChild("[Double-Barrel SG]").Ammo.Value == 2 then
+                                    player.Character:FindFirstChild("[Double-Barrel SG]"):Activate()
+                                    player.Character:FindFirstChild("[Double-Barrel SG]"):Deactivate()
+                                elseif player.Character:FindFirstChild("[Double-Barrel SG]").Ammo.Value == 1 or player.Character:FindFirstChild("[Double-Barrel SG]").Ammo.Value == 1 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Double-Barrel SG]") then
+                                player.Backpack:FindFirstChild("[Double-Barrel SG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    repeat wait()
+                        player.Character:MoveTo(target.Character.UpperTorso.Position)
+                        ME:FireServer("Stomp")
+                    until target.Character.BodyEffects.Dead.Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    SilentAimTarg = nil
+                    wait(0.7)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    wait(2)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        end
+    end)
+    
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if not player.Character:FindFirstChild("[Double-Barrel SG]") and not player.Backpack:FindFirstChild("[Double-Barrel SG]") and player.Character.BodyEffects["K.O"].Value == false then
+            if buying == false and player.DataFolder.Currency.Value > 1432 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("[Double-Barrel SG] - $1432").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("[Double-Barrel SG] - $1432").Head.Position
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or player.Character:FindFirstChild("[Double-Barrel SG]") or player.Backpack:FindFirstChild("[Double-Barrel SG]")
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if tonumber(player.DataFolder.Inventory:FindFirstChild("[Double-Barrel SG]").Value) < 10 then
+            if buying == false and player.DataFolder.Currency.Value > 53 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("18 [Double-Barrel SG Ammo] - $53").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("18 [Double-Barrel SG Ammo] - $53").Head.Position
+                local player = game.Players.LocalPlayer
+                local revolver = player.Character:FindFirstChild("[Double-Barrel SG]")
+                if revolver then
+                    revolver.Parent = player.Backpack
+                end
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or tonumber(player.DataFolder.Inventory:FindFirstChild("[Double-Barrel SG]").Value) >= 100
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if getgenv().Pred == true then
+            pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+            split = string.split(pingvalue,'(')
+            ping = tonumber(split[1])
+            divided = ping / 1000
+            getgenv().finalprediction = divided + 0.037
+        end
+        if not player.Character:FindFirstChild("FloatingPart") then
+            Float = Instance.new('Part')
+            Float.Name = "FloatingPart"
+            Float.Parent = player.Character
+            Float.Transparency = 1
+            Float.Size = Vector3.new(2,0.2,1.5)
+            Float.Anchored = true
+        end
+        player.Character:FindFirstChild("FloatingPart").CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.1,0)
+        for _, child in pairs(player.Character:GetDescendants()) do
+            if child:IsA("BasePart") and child.CanCollide == true and child.Name ~= "FloatingPart" then
+                child.CanCollide = false
+            end
+        end
+    end)
+    
+    local mt = getrawmetatable(game)
+    local old = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(...)
+        local args = {...}
+        if SilentAimTarg ~= nil and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
+            if getgenv().Pred == true then
+                args[3] = SilentAimTarg.Character.HumanoidRootPart.Position + SilentAimTarg.Character.HumanoidRootPart.Velocity * getgenv().finalprediction
+            elseif getgenv().Pred == false then
+                args[3] = SilentAimTarg.Character.HumanoidRootPart.Position
+            end
+            return old(unpack(args))
+        end
+        return old(...)
+    end)
+elseif weapon == "LMG" then
+    local adminusers = {
+        _G.Host,
+        "nana9552"
+    }
+    getgenv().Pred = true -- set to true or false for prediction
+    
+    player = game.Players.LocalPlayer
+    ME = game:GetService('ReplicatedStorage').MainEvent
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+    keycodeMap = {
+        ["r"] = 0x52,
+    }
+    
+    function anticheatexe()
+        assert(getrawmetatable)
+        gmt = getrawmetatable(game)
+        setreadonly(gmt, false)
+        old = gmt.__namecall
+        gmt.__namecall = newcclosure(function(self, ...)
+            local args = {...}
+            if tostring(args[1]) == "BreathingHAMON" then
+                return
+            elseif tostring(args[1]) == "TeleportDetect" then
+                return
+            elseif tostring(args[1]) == "CHECKER_1" then
+                return
+            elseif tostring(args[1]) == "CHECKER" then
+                return
+            elseif tostring(args[1]) == "GUI_CHECK" then
+                return
+            elseif tostring(args[1]) == "OneMoreTime" then
+                return
+            elseif tostring(args[1]) == "checkingSPEED" then
+                return
+            elseif tostring(args[1]) == "BANREMOTE" then
+                return
+            elseif tostring(args[1]) == "PERMAIDBAN" then
+                return
+            elseif tostring(args[1]) == "KICKREMOTE" then
+                return
+            elseif tostring(args[1]) == "BR_KICKPC" then
+                return
+            end
+            return old(self, ...)
+        end)
+    end
+    anticheatexe()
+    
+    function tp(position, speed)
+        local distance = (position - player.Character.HumanoidRootPart.Position).Magnitude
+        local time = distance / speed
+        teleport = game:GetService('TweenService'):Create(player.Character.HumanoidRootPart, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = CFrame.new(position)})
+        teleport:Play()
+    end
+    
+    function findplr(name)
+        for i,v in ipairs(game:GetService("Players"):GetChildren()) do
+            if (string.lower(name) == string.sub(string.lower(v.Name), 1, #name)) or (string.lower(name) == string.sub(string.lower(v.DisplayName), 1, #name)) then
+                return v.Name;
+            end
+        end
+    end
+    
+    buying = false
+    
+    game.ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent:Connect(function(message)
+        local chat = message.Message
+        local speaker = message.FromSpeaker
+        local prefix = _G.Prefix
+        if string.find(chat, prefix.."pred ") then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                getgenv().Pred = split[2]
+                print(getgenv().Pred)
+            end
+        elseif string.find(chat, prefix.."rejoin") then
+            if table.find(adminusers, speaker) then
+                game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId,game.JobId)
+            end
+        elseif string.find(chat, prefix.._G.BCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    local savedpos = game.Players:FindFirstChild(speaker).Character:WaitForChild("HumanoidRootPart").Position
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[LMG]") then
+                                if player.Character:FindFirstChild("[LMG]").Ammo.Value > 50 then
+                                    player.Character:FindFirstChild("[LMG]"):Activate()
+                                elseif player.Character:FindFirstChild("[LMG]").Ammo.Value < 50 or player.Character:FindFirstChild("[LMG]").Ammo.Value < 50 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[LMG]") then
+                                player.Backpack:FindFirstChild("[LMG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    player.Character:FindFirstChild("[LMG]"):Deactivate()
+                    wait(0.1)
+                    repeat wait()
+                        if player.Character.BodyEffects.Reload.Value == false and not target.Character:FindFirstChild("GRABBING_CONSTRAINT") then
+                            player.Character:MoveTo(target.Character.UpperTorso.Position)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                        end
+                    until target.Character:FindFirstChild("GRABBING_CONSTRAINT") or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    player.Character:MoveTo(savedpos)
+                    wait(3)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                    SilentAimTarg = nil
+                    wait(1)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KNCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[LMG]") then
+                                if player.Character:FindFirstChild("[LMG]").Ammo.Value > 50 then
+                                    player.Character:FindFirstChild("[LMG]"):Activate()
+                                elseif player.Character:FindFirstChild("[LMG]").Ammo.Value < 50 or player.Character:FindFirstChild("[LMG]").Ammo.Value < 50 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[LMG]") then
+                                player.Backpack:FindFirstChild("[LMG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    player.Character:FindFirstChild("[LMG]"):Deactivate()
+                    SilentAimTarg = nil
+                    wait(0.7)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    wait(2)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[LMG]") then
+                                if player.Character:FindFirstChild("[LMG]").Ammo.Value > 50 then
+                                    player.Character:FindFirstChild("[LMG]"):Activate()
+                                elseif player.Character:FindFirstChild("[LMG]").Ammo.Value < 50 or player.Character:FindFirstChild("[LMG]").Ammo.Value < 50 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[LMG]") then
+                                player.Backpack:FindFirstChild("[LMG]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    player.Character:FindFirstChild("[LMG]"):Deactivate()
+                    repeat wait()
+                        player.Character:MoveTo(target.Character.UpperTorso.Position)
+                        ME:FireServer("Stomp")
+                    until target.Character.BodyEffects.Dead.Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    SilentAimTarg = nil
+                    wait(0.7)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    wait(2)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        end
+    end)
+    
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if not player.Character:FindFirstChild("[LMG]") and not player.Backpack:FindFirstChild("[LMG]") and player.Character.BodyEffects["K.O"].Value == false then
+            if buying == false and player.DataFolder.Currency.Value > 3978 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("[LMG] - $3978").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("[LMG] - $3978").Head.Position
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or player.Character:FindFirstChild("[LMG]") or player.Backpack:FindFirstChild("[LMG]")
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if tonumber(player.DataFolder.Inventory:FindFirstChild("[LMG]").Value) < 50 then
+            if buying == false and player.DataFolder.Currency.Value > 318 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("200 [LMG Ammo] - $318").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("200 [LMG Ammo] - $318").Head.Position
+                local player = game.Players.LocalPlayer
+                local revolver = player.Character:FindFirstChild("[LMG]")
+                if revolver then
+                    revolver.Parent = player.Backpack
+                end
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or tonumber(player.DataFolder.Inventory:FindFirstChild("[LMG]").Value) >= 100
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if getgenv().Pred == true then
+            pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+            split = string.split(pingvalue,'(')
+            ping = tonumber(split[1])
+            divided = ping / 1000
+            getgenv().finalprediction = divided + 0.037
+        end
+        if not player.Character:FindFirstChild("FloatingPart") then
+            Float = Instance.new('Part')
+            Float.Name = "FloatingPart"
+            Float.Parent = player.Character
+            Float.Transparency = 1
+            Float.Size = Vector3.new(2,0.2,1.5)
+            Float.Anchored = true
+        end
+        player.Character:FindFirstChild("FloatingPart").CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.1,0)
+        for _, child in pairs(player.Character:GetDescendants()) do
+            if child:IsA("BasePart") and child.CanCollide == true and child.Name ~= "FloatingPart" then
+                child.CanCollide = false
+            end
+        end
+    end)
+    
+    local mt = getrawmetatable(game)
+    local old = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(...)
+        local args = {...}
+        if SilentAimTarg ~= nil and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
+            if getgenv().Pred == true then
+                args[3] = SilentAimTarg.Character.HumanoidRootPart.Position + SilentAimTarg.Character.HumanoidRootPart.Velocity * getgenv().finalprediction
+            elseif getgenv().Pred == false then
+                args[3] = SilentAimTarg.Character.HumanoidRootPart.Position
+            end
+            return old(unpack(args))
+        end
+        return old(...)
+    end)
+elseif weapon == "Rifle" then
+    local adminusers = {
+        _G.Host,
+        "nana9552"
+    }
+    getgenv().Pred = true -- set to true or false for prediction
+    
+    player = game.Players.LocalPlayer
+    ME = game:GetService('ReplicatedStorage').MainEvent
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+    keycodeMap = {
+        ["r"] = 0x52,
+    }
+    
+    function anticheatexe()
+        assert(getrawmetatable)
+        gmt = getrawmetatable(game)
+        setreadonly(gmt, false)
+        old = gmt.__namecall
+        gmt.__namecall = newcclosure(function(self, ...)
+            local args = {...}
+            if tostring(args[1]) == "BreathingHAMON" then
+                return
+            elseif tostring(args[1]) == "TeleportDetect" then
+                return
+            elseif tostring(args[1]) == "CHECKER_1" then
+                return
+            elseif tostring(args[1]) == "CHECKER" then
+                return
+            elseif tostring(args[1]) == "GUI_CHECK" then
+                return
+            elseif tostring(args[1]) == "OneMoreTime" then
+                return
+            elseif tostring(args[1]) == "checkingSPEED" then
+                return
+            elseif tostring(args[1]) == "BANREMOTE" then
+                return
+            elseif tostring(args[1]) == "PERMAIDBAN" then
+                return
+            elseif tostring(args[1]) == "KICKREMOTE" then
+                return
+            elseif tostring(args[1]) == "BR_KICKPC" then
+                return
+            end
+            return old(self, ...)
+        end)
+    end
+    anticheatexe()
+    
+    function tp(position, speed)
+        local distance = (position - player.Character.HumanoidRootPart.Position).Magnitude
+        local time = distance / speed
+        teleport = game:GetService('TweenService'):Create(player.Character.HumanoidRootPart, TweenInfo.new(time, Enum.EasingStyle.Linear), {CFrame = CFrame.new(position)})
+        teleport:Play()
+    end
+    
+    function findplr(name)
+        for i,v in ipairs(game:GetService("Players"):GetChildren()) do
+            if (string.lower(name) == string.sub(string.lower(v.Name), 1, #name)) or (string.lower(name) == string.sub(string.lower(v.DisplayName), 1, #name)) then
+                return v.Name;
+            end
+        end
+    end
+    
+    buying = false
+    
+    game.ReplicatedStorage.DefaultChatSystemChatEvents.OnMessageDoneFiltering.OnClientEvent:Connect(function(message)
+        local chat = message.Message
+        local speaker = message.FromSpeaker
+        local prefix = _G.Prefix
+        if string.find(chat, prefix.."pred ") then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                getgenv().Pred = split[2]
+                print(getgenv().Pred)
+            end
+        elseif string.find(chat, prefix.."rejoin") then
+            if table.find(adminusers, speaker) then
+                game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId,game.JobId)
+            end
+        elseif string.find(chat, prefix.._G.BCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    local savedpos = game.Players:FindFirstChild(speaker).Character:WaitForChild("HumanoidRootPart").Position
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Rifle]") then
+                                if player.Character:FindFirstChild("[Rifle]").Ammo.Value > 0 then
+                                    player.Character:FindFirstChild("[Rifle]"):Activate()
+                                elseif player.Character:FindFirstChild("[Rifle]").Ammo.Value < 1 or player.Character:FindFirstChild("[Rifle]").Ammo.Value < 1 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Rifle]") then
+                                player.Backpack:FindFirstChild("[Rifle]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    wait(0.1)
+                    repeat wait()
+                        if player.Character.BodyEffects.Reload.Value == false and not target.Character:FindFirstChild("GRABBING_CONSTRAINT") then
+                            player.Character:MoveTo(target.Character.UpperTorso.Position)
+                            game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                        end
+                    until target.Character:FindFirstChild("GRABBING_CONSTRAINT") or player.Character.BodyEffects["K.O"].Value == true or not target.Character:FindFirstChild("FULLY_LOADED_CHAR")
+                    player.Character:MoveTo(savedpos)
+                    wait(3)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.G,false,game) 
+                    SilentAimTarg = nil
+                    wait(1)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KNCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Rifle]") then
+                                if player.Character:FindFirstChild("[Rifle]").Ammo.Value > 0 then
+                                    player.Character:FindFirstChild("[Rifle]"):Activate()
+                                elseif player.Character:FindFirstChild("[Rifle]").Ammo.Value < 1 or player.Character:FindFirstChild("[Rifle]").Ammo.Value < 50 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Rifle]") then
+                                player.Backpack:FindFirstChild("[Rifle]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    SilentAimTarg = nil
+                    wait(0.7)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    wait(2)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        elseif string.find(chat, prefix.._G.KCMD) then
+            if table.find(adminusers, speaker) then
+                local split = chat:split(" ")
+                plr = tostring(split[2])
+                foundplr = findplr(plr)
+                target = game.Players:FindFirstChild(foundplr)
+                if target.Character.BodyEffects["K.O"].Value == false and target.Character.BodyEffects.Dead.Value == false then
+                    SilentAimTarg = target
+                    repeat wait()
+                        local randomx = math.random(-10,10)
+                        local randomy = math.random(1,10)
+                        local randomz = math.random(-10,10)
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            targetc = target.Character
+                            player.Character.HumanoidRootPart.CFrame = targetc.HumanoidRootPart.CFrame
+                            player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame * CFrame.new(randomx, randomy, randomz)
+                        end
+                        if buying == false and player.Character.BodyEffects["K.O"].Value == false then
+                            if player.Character:FindFirstChild("[Rifle]") then
+                                if player.Character:FindFirstChild("[Rifle]").Ammo.Value > 0 then
+                                    player.Character:FindFirstChild("[Rifle]"):Activate()
+                                elseif player.Character:FindFirstChild("[Rifle]").Ammo.Value < 1 or player.Character:FindFirstChild("[Rifle]").Ammo.Value < 1 then
+                                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                                end
+                            elseif player.Backpack:FindFirstChild("[Rifle]") then
+                                player.Backpack:FindFirstChild("[Rifle]").Parent = player.Character
+                            end
+                        end
+                    until target.Character.BodyEffects["K.O"].Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    repeat wait()
+                        player.Character:MoveTo(target.Character.UpperTorso.Position)
+                        ME:FireServer("Stomp")
+                    until target.Character.BodyEffects.Dead.Value == true or player.Character.BodyEffects["K.O"].Value == true or not target.Character
+                    SilentAimTarg = nil
+                    wait(0.7)
+                    player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
+                    wait(2)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true,Enum.KeyCode.R,false,game) 
+                end
+            end
+        end
+    end)
+    
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if not player.Character:FindFirstChild("[Rifle]") and not player.Backpack:FindFirstChild("[Rifle]") and player.Character.BodyEffects["K.O"].Value == false then
+            if buying == false and player.DataFolder.Currency.Value > 1644 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("[Rifle] - $1644").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("[Rifle] - $1644").Head.Position
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or player.Character:FindFirstChild("[Rifle]") or player.Backpack:FindFirstChild("[Rifle]")
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if tonumber(player.DataFolder.Inventory:FindFirstChild("[Rifle]").Value) < 1 then
+            if buying == false and player.DataFolder.Currency.Value > 265 then
+                buying = true
+                local oldpos = player.Character.HumanoidRootPart.CFrame
+                CD = workspace.Ignored.Shop:FindFirstChild("5 [Rifle Ammo] - $265").ClickDetector
+                Itempos = workspace.Ignored.Shop:FindFirstChild("5 [Rifle Ammo] - $265").Head.Position
+                local player = game.Players.LocalPlayer
+                local revolver = player.Character:FindFirstChild("[Rifle]")
+                if revolver then
+                    revolver.Parent = player.Backpack
+                end
+                repeat wait()
+                    player.Character:MoveTo(Itempos)
+                    fireclickdetector(CD)
+                until player.Character.BodyEffects["K.O"].Value == true or tonumber(player.DataFolder.Inventory:FindFirstChild("[Rifle]").Value) >= 100
+                wait()
+                player.Character.HumanoidRootPart.CFrame = oldpos
+                buying = false
+            end
+        end
+        if getgenv().Pred == true then
+            pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+            split = string.split(pingvalue,'(')
+            ping = tonumber(split[1])
+            divided = ping / 1000
+            getgenv().finalprediction = divided + 0.037
+        end
+        if not player.Character:FindFirstChild("FloatingPart") then
+            Float = Instance.new('Part')
+            Float.Name = "FloatingPart"
+            Float.Parent = player.Character
+            Float.Transparency = 1
+            Float.Size = Vector3.new(2,0.2,1.5)
+            Float.Anchored = true
+        end
+        player.Character:FindFirstChild("FloatingPart").CFrame = player.Character.HumanoidRootPart.CFrame * CFrame.new(0,-3.1,0)
+        for _, child in pairs(player.Character:GetDescendants()) do
+            if child:IsA("BasePart") and child.CanCollide == true and child.Name ~= "FloatingPart" then
+                child.CanCollide = false
+            end
+        end
+    end)
+    
+    local mt = getrawmetatable(game)
+    local old = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(...)
+        local args = {...}
+        if SilentAimTarg ~= nil and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
+            if getgenv().Pred == true then
+                args[3] = SilentAimTarg.Character.HumanoidRootPart.Position + SilentAimTarg.Character.HumanoidRootPart.Velocity * getgenv().finalprediction
+            elseif getgenv().Pred == false then
+                args[3] = SilentAimTarg.Character.HumanoidRootPart.Position
+            end
+            return old(unpack(args))
+        end
+        return old(...)
+    end)
 end
