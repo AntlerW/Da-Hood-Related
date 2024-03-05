@@ -18,6 +18,8 @@ if weapon == "rev" then
         if v.Name == "5 [RPG Ammo] - $1061" then
           if not v:FindFirstChild("Head") and v:IsA("Model") then
             v:Destroy()
+            elseif v:FindFirstChild("Head") then
+                
           end
         end
       end
