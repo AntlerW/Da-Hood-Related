@@ -1,6 +1,6 @@
 for i,v in pairs(game.Workspace:GetDescendants()) do
   if v.Name == "5 [RPG Ammo] - $1061" then
-    if not v:FindFirstChild("Head") then
+    if not v:FindFirstChild("Head") and v:IsA("Model") then
       v:Destroy()
     end
   end
