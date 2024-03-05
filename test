@@ -13,6 +13,14 @@ if weapon == "rev" then
     keycodeMap = {
         ["r"] = 0x52,
     }
+
+    for i,v in pairs(game.Workspace:GetDescendants()) do
+        if v.Name == "5 [RPG Ammo] - $1061" then
+          if not v:FindFirstChild("Head") then
+            v:Destroy()
+          end
+        end
+      end
     
     function anticheatexe()
         assert(getrawmetatable)
@@ -291,13 +299,6 @@ elseif weapon == "rpg" then
     player = game.Players.LocalPlayer
     ME = game:GetService('ReplicatedStorage').MainEvent
     player.Character.HumanoidRootPart.CFrame = CFrame.new(-202.324371, 29.7690201, -1169.81189, -0.976575911, -2.1070079e-08, 0.215173259, -1.38218876e-08, 1, 3.51900482e-08, -0.215173259, 3.13916502e-08, -0.976575911)
-    for i,v in pairs(game.Workspace:GetDescendants()) do
-        if v.Name == "5 [RPG Ammo] - $1061" then
-          if not v:FindFirstChild("Head") then
-            v:Destroy()
-          end
-        end
-      end
     function anticheatexe()
         assert(getrawmetatable)
         gmt = getrawmetatable(game)
